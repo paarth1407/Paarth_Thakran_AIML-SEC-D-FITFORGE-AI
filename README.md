@@ -1,1 +1,11 @@
 # Paarth_Thakran_AIML-SEC-D-FITFORGE-AI
+
+TEAM MEMBERS : 
+Paarth thakran (2301730208) 
+Abhishek (2301730280)
+Saksham(2301730235)
+Durgesh(2301730229)
+
+
+LINK TO VIDEO PRESENTATION : 
+
