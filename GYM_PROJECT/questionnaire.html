@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fit-Forge AI - Questionnaire</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .questionnaire-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 50px auto;
+        }
+        .questionnaire-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .questionnaire-header img {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .question:last-child {
+            border-bottom: none;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .option-btn {
+            flex: 1;
+            min-width: 120px;
+        }
+    </style>
+</head>
+<body>
+    <div class="questionnaire-container">
+        <div class="questionnaire-header">
+            <img src="images/logo.png" alt="FitForge AI">
+            <h2>Tell Us About Yourself</h2>
+            <p>Help us create your personalized fitness plan</p>
+        </div>
+        
+        <form id="questionnaireForm">
+            <div class="question">
+                <h5>1. What is your gender?</h5>
+                <div class="options">
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="male">Male</button>
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="female">Female</button>
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="other">Other</button>
+                </div>
+                <input type="hidden" id="gender" name="gender" required>
+            </div>
+            
+            <div class="question">
+                <h5>2. What is your age group?</h5>
+                <div class="options">
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="18-25">18-25</button>
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="26-35">26-35</button>
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="36-45">36-45</button>
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="46+">46+</button>
+                </div>
+                <input type="hidden" id="age" name="age" required>
+            </div>
+            
+            <div class="question">
+                <h5>3. What is your primary fitness goal?</h5>
+                <div class="options">
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="weight-loss">Weight Loss</button>
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="muscle-gain">Muscle Gain</button>
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="endurance">Endurance</button>
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="flexibility">Flexibility</button>
+                </div>
+                <input type="hidden" id="goal" name="goal" required>
+            </div>
+            
+            <div class="question">
+                <h5>4. How often can you workout?</h5>
+                <div class="options">
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="3-days">3 days/week</button>
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="5-days">5 days/week</button>
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="daily">Daily</button>
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="weekends">Weekends only</button>
+                </div>
+                <input type="hidden" id="frequency" name="frequency" required>
+            </div>
+            
+            <div class="question">
+                <h5>5. Do you have any injuries or health conditions?</h5>
+                <div class="options">
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="none">None</button>
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="back-pain">Back Pain</button>
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="knee-pain">Knee Pain</button>
+                    <button type="button" class="btn btn-outline-primary option-btn" data-value="other-condition">Other</button>
+                </div>
+                <input type="hidden" id="conditions" name="conditions" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block mt-4">Complete Setup</button>
+        </form>
+    </div>
+
+    <script>
+        // Handle option button clicks
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from siblings
+                this.parentElement.querySelectorAll('.option-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Update corresponding hidden input
+                const questionDiv = this.closest('.question');
+                const hiddenInput = questionDiv.querySelector('input[type="hidden"]');
+                hiddenInput.value = this.dataset.value;
+            });
+        });
+
+        // Handle form submission
+        document.getElementById('questionnaireForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate all questions are answered
+            const allAnswered = Array.from(document.querySelectorAll('input[type="hidden"]')).every(input => input.value);
+            
+            if(!allAnswered) {
+                alert('Please answer all questions before proceeding.');
+                return;
+            }
+            
+            // Store answers (in a real app, you'd send to server)
+            const formData = new FormData(this);
+            const answers = Object.fromEntries(formData.entries());
+            localStorage.setItem('userProfile', JSON.stringify(answers));
+            
+            // Redirect to dashboard
+            window.location.href = 'dashboard.html';
+        });
+    </script>
+</body>
+</html>
